@@ -37,19 +37,18 @@ def registerPage(request):
 
             form.save()
 
-            if form.save():
-                template = render_to_string('mails/email_template.html', {'name': username})
+            template = render_to_string('mails/email_template.html', {'name': username})
 
-                mail = EmailMessage(
-                    'Admino Account',
-                    template,
-                    settings.EMAIL_HOST_USER,
-                    [email],
-                )
-                mail.fail_silently = False
-                mail.send()
+            mail = EmailMessage(
+                'Admino Account',
+                template,
+                settings.EMAIL_HOST_USER,
+                [email],
+            )
+            mail.fail_silently = False
+            mail.send()
+            return redirect('login')
 
-                return redirect('login')
     context = {'form': form}
     return render(request, 'register.html', context)
 

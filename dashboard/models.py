@@ -16,7 +16,7 @@ class Profile(models.Model):
 
     def createProfile(sender, **kwargs):
         if kwargs['created']:
-            profile = Profile.objects.created(user=kwargs['instance'])
+            profile = Profile.objects.create(user=kwargs['instance'])
 
     post_save.connect(createProfile, sender=User)
 

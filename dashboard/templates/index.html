@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            background-color: bisque;
+        }
+        .main{
+            width: 100%;
+            min-height: 100vh;
+            padding-left: 4%;
+            padding-right: 4%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .navbar{
+            display: flex;
+            width: 100%;
+            border: 5px solid rgb(139, 138, 138);
+            align-items: center;
+        }
+        .logo{
+            /* incase of a pic */
+            width: 50px;
+            /* width: fit-content; */
+            cursor: pointerx;
+            margin: 30px 0;
+        }
+        .menu-icon{
+            width: 25px;
+            cursor: pointer;
+        }
+        .navbar nav{
+            flex: 1;
+            text-align: right;
+            border: rgb(139, 138, 138);
+        }
+         nav ul li{
+            list-style: none;
+            display: inline-block;
+            margin-right: 30px;
+        }
+        nav ul li a{
+            text-decoration: none;
+            border-radius: 50px;
+        }
+
+        .container{
+            display: flex;
+            height: 600px;
+            width: 100%;
+        }
+
+        .container .left-nav{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 75vh;
+            width: 15%;
+            margin-top: 25px;
+            border: 5px solid gray;
+        }
+        .container .left-nav .left-menu{
+            /* margin-left: 10px; */
+            width: 25px;
+            cursor: pointer;
+        }
+        .left-nav .profile{
+            display: flex;
+        }
+        .left-nav .profile button{
+            width: 20px;
+            height: 20px;
+            margin-top: 10px;
+            background-color: gray;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+        .left-nav .profile-img{
+            align-items: center;
+            width: 50px;
+            border-radius: 50px;
+            border: 5px solid gray;
+            margin-top: 20px;
+        }
+        .container.left-nav nav{
+            text-align: center;
+            align-items: center;
+            margin-top: 35px;
+            margin-left: 5px;
+            padding: 5px;
+        }
+        .container.left-nav nav ul{
+            margin-left: 5px;
+            padding: 5px;
+        }
+
+        .container.left-nav nav li{
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            font-size: 25px;
+        }
+
+        .container .panel{
+            width: 75%;
+            height: 75vh;
+            border: 5px solid gray;
+            margin-left: 50px;
+            margin-top: 25px;
+        }
+
+        .container .panel .bal-wit{
+            align-items: center;
+            text-align: center;
+            border: 5px solid gray;
+            float: right;
+            margin-right: 10px;
+        }
+        .container .panel .bal-wit .withdraw-btn{
+            background-color: gray;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+        .container .panel .row2 ul{
+            border: 5px solid gray;
+        }
+        .container .panel .row2 button{
+            background-color: gray;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+        .container .panel .row2 form{
+            padding: 15px;
+            border:  5px solid gray;
+        }
+        .container .panel .row2 form .add-btn{
+            width: 55px;
+            background-color: gray;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+    </style>
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">-->
+</head>
+<body>
+    <div class="main">
+        <div class="navbar">
+            <img src="{% static 'images/admin.jpeg' %}" alt="ADMINO" class="logo">
+            <nav>
+                <ul id="menuList">
+                    <li><a href="{% url 'home' %}">Dashboard</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </nav>
+            <img src="{% static 'images/menu-icon.png' %}" alt="menu-icon"  onclick="togglemenu()" class="menu-icon">
+        </div>
+        <div class="container">
+            <div class="left-nav">
+                <img src="{% static 'images/menu-icon.png' %}" alt="left-menu" onclick="sidetogglemenu()" class="left-menu">
+                <div class="profile">
+                    <img src="{{ user.profile.pic.url }}" alt="pic" class="profile-img">
+                    <button>+</button>
+                </div>
+                <p>{{ request.user }}  </p><span><a href="{% url 'profile' %}">Edit</a></span>
+                <br>
+                <nav>
+                    <ul id="side-menuList">
+                        <li><a href="{% url 'home' %}">Dashboard</a></li>
+                        <br>
+                        <li><a href="{% url 'profile' %}">Profile</a></li>
+                        <br>
+                        <li><a href="#">Reports</a></li>
+                        <br>
+                        <li><a href="#">About</a></li>
+                        <br>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                        <br>
+                    </ul>
+                </nav>
+            </div>
+            <div class="panel">
+                <h1>User Dashboard</h1>
+                <br>
+                <div class="bal-wit">
+                    <p class="bal">Account Bal: $0.00</p>
+                    <button class="withdraw-btn">Withdraw</button>
+                </div>
+                <hr>
+                <br>
+                <br>
+                <div class="row2">
+                    <h2>ARTICLES</h2>
+                    <ul>
+                        {% for article in articles %}
+                            {% if article %}
+                                <li><a href="{% url 'article' %}" id="{{ article.id }}">{{ article.title }}</a></li>
+                            {% else %}
+                                No Article Posted
+                            {% endif %}
+                        {% endfor %}
+
+                    </ul>
+                    <br>
+                    <button onclick="addArticle()">Add Article</button>
+                    <hr>
+                    <br>
+                    <form id="article-form">
+                        <label>Tittle</label>
+                        <input type="text" placeholder="Title of Article" name="title">
+                        <br>
+                        <label>Publisher</label>
+                        <input type="text" placeholder="The Author/writter" name="publisher">
+                        <br>
+                        <label>Content</label>
+                        <input type="textarea" name="content" placeholder="Type the Article">
+                        <br>
+                        <br>
+                        <input type="submit" value="Add" class="add-btn">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="{% static 'js/script.js' %}" type="text/javascript" ></script>
+</body>
+</html>

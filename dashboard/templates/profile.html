@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            background-color: bisque;
+        }
+        .main{
+            width: 100%;
+            min-height: 100vh;
+            padding-left: 4%;
+            padding-right: 4%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .navbar{
+            display: flex;
+            width: 100%;
+            border: 5px solid rgb(139, 138, 138);
+            align-items: center;
+        }
+        .logo{
+            /* incase of a pic */
+            width: 50px;
+            cursor: pointerx;
+            margin: 30px 0;
+        }
+        .menu-icon{
+            width: 25px;
+            cursor: pointer;
+        }
+        .navbar nav{
+            flex: 1;
+            text-align: right;
+            border: rgb(139, 138, 138);
+        }
+         nav ul li{
+            list-style: none;
+            display: inline-block;
+            margin-right: 30px;
+        }
+        nav ul li a{
+            text-decoration: none;
+            border-radius: 50px;
+        }
+
+        .container{
+            display: flex;
+            height: 600px;
+            width: 100%;
+        }
+
+        .container .left-nav{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 75vh;
+            width: 15%;
+            margin-top: 25px;
+            border: 5px solid gray;
+        }
+        .container .left-nav .left-menu{
+            /* margin-left: 10px; */
+            width: 25px;
+            cursor: pointer;
+        }
+        .left-nav .profile{
+            display: flex;
+        }
+        .left-nav .profile button{
+            width: 20px;
+            height: 20px;
+            margin-top: 10px;
+            background-color: gray;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+        .left-nav .profile-img{
+            align-items: center;
+            width: 50px;
+            border-radius: 50px;
+            border: 5px solid gray;
+            margin-top: 20px;
+        }
+        .container.left-nav nav{
+            flex: 1;
+            text-align: center;
+            align-items: center;
+            margin-top: 35px;
+        }
+
+        .container.left-nav nav li{
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            font-size: 25px;
+        }
+
+        .container .panel{
+            width: 75%;
+            height: 75vh;
+            border: 5px solid gray;
+            margin-left: 50px;
+            margin-top: 25px;
+        }
+
+        .container .panel .row2 ul .side-nav-list{
+            text-align: center;
+            border: 5px solid gray;
+            margin: 5px;
+        }
+        .container .panel .row2 ul li{
+            text-decoration: none;
+        }
+        .container .panel .row2 form{
+            border: 5px solid gray;
+        }
+        .container .panel .row2 form .submit-btn{
+            width: 60px;
+            background-color: gray;
+            border-radius: 50px;
+        }
+        .container .panel .row2 .edit-form-btn{
+            width: 50px;
+            background-color: gray;
+            border-radius: 50px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="navbar">
+            <img src="{% static 'images/admin.jpeg' %}" alt="ADMINO" class="logo">
+            <nav>
+                <ul>
+                    <li><a href="{% url 'home' %}">Dashboard</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                    <li><a href="{% url 'article' %}">Articles</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </nav>
+            <img src="{%  static 'images/menu-icon.png' %}" alt="menu-icon" class="menu-icon">
+        </div>
+        <div class="container">
+            <div class="left-nav">
+                <img src="{% static 'images/menu-icon.png' %}" alt="left-menu" class="left-menu">
+                <div class="profile">
+                    <img src="{{ user.profile.pic.url }}" alt="pic" class="profile-img">
+                    <button>+</button>
+                </div>
+                <p>{{ request.user }}  </p><span><a href="{% url 'profile' %}">Edit</a></span>
+                <br>
+                <nav>
+                    <ul class="side-nav-list">
+                        <li><a href="{% url 'home' %}">Dashboard</a></li>
+                        <br>
+                        <li><a href="{% url 'profile' %}">Profile</a></li>
+                        <br>
+                        <li><a href="#">Reports</a></li>
+                        <br>
+                        <li><a href="#">About</a></li>
+                        <br>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="panel">
+                <h1>User Profile</h1>
+                <br>
+                <!-- <div class="bal-wit">
+                    <p class="bal">Account Bal: $0.00</p>
+                    <button class="withdraw-btn">Withdraw</button>
+                </div>
+                <hr>
+                <br>
+                <br> -->
+
+                <div class="row2"> 
+                    <h2>User Info</h2>
+                    <br>
+                    <ul class="">
+                        <li>First Name: Eustess</li>
+                        <li>Last Name: Besong</li>
+                        <li>Username: EustessB</li>
+                        <li>Email: eustess@gmail.com</li>
+                    </ul>
+                    <button class="edit-form-btn">Edit</button>
+                    <br>
+                    <br>
+                    <form>
+                        <label>First Name</label>
+                        <input type="text" placeholder="Your First Name" name="firstname">
+                        <br>
+                        <label>Last Name</label>
+                        <input type="text" placeholder="Your Last Name" name="lastname">
+                        <br>
+                        <label>Username</label>
+                        <input type="text" placeholder="Your Username" name="username">
+                        <br>
+                        <label>Email</label>
+                        <input type="text" placeholder="Your Email" name="email">
+                        <br>
+                        <br>
+                        <input type="submit" value="Update" class="submit-btn">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

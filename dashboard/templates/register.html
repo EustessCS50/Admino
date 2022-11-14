@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    body{
+            background-color: bisque;
+    }
+        .container{
+            width: 300px;
+            border: 10px solid gray;
+            background-color: bisque;
+            padding: 50px;
+            margin: 50px;
+            align-items: center;
+        }
+        .container h1{
+            text-align: center;
+        }
+        .container h2{
+            text-align: center;
+        }
+        .container form{
+            padding: 15px;
+            margin-right: 50px;
+            margin-top: 0px;
+
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <h1>@ADMINO</h1>
+            <hr>
+            <h2>Register</h2>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form.errors }}
+                {{ form.username.label }}
+                <br>
+                {{ form.username }}
+                <br>
+                <br>
+                {{ form.email.label }}
+                <Br>
+                {{ form.email }}
+                <br>
+                <br>
+                {{ form.password1.label }}
+                <Br>
+                {{ form.password1 }}
+                <br>
+                <br>
+                {{ form.password2.label }}
+                <br>
+                {{ form.password2 }}
+                <br>
+                <br>
+                <input type="submit" value="Register">
+            </form>
+            <p>Have an account?</p>
+            <a href="{% url 'login' %}">Login</a>
+        </div>
+    </div>
+</body>
+</html>

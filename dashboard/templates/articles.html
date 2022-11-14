@@ -165,7 +165,11 @@
             <div class="left-nav">
                 <img src="{% static 'images/menu-icon.png' %}" alt="left-menu" onclick="sidetogglemenu()" class="left-menu">
                 <div class="profile">
-                    <img src="{{ user.profile.pic.url }}" alt="pic" class="profile-img">
+                    {% if user.profile.pic.url %}
+                        <img src="{{ user.profile.pic.url }}" alt="pic" class="profile-img">
+                    {% else %}
+                        <img src="{% static 'images/profile_pics/default_profile_pic.jpg' %}">
+                    {% endif %}
                     <button>+</button>
                 </div>
                 <p>{{ request.user }}  </p><span><a href="{% url 'profile' %}">Edit</a></span>

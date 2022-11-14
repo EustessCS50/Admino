@@ -166,7 +166,7 @@ def withdrawPage(request):
                 profile.balance -= int(amount)
                 profile.save()
                 template = render_to_string(
-                    'mails/Withdraw_email_template.html',
+                    'mails/withdraw_email_template.html',
                     {
                         'name': request.user.username,
                         'amount': amount,

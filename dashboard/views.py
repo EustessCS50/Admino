@@ -7,8 +7,9 @@ from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.utils import timezone
 
-from .forms import RegisterForm, ArticleForm
+from .forms import RegisterForm, ArticleForm, ProfileForm
 from .models import *
 
 
@@ -16,9 +17,8 @@ from .models import *
 
 @login_required(login_url='login')
 def homePage(request):
-    articles = Article.objects.all()
-    profiles = Profile.objects.all()
-    context = {'articles': articles, 'profiles': profiles}
+    articles = Article.objects.filter(publish_date__lte=timezone.now()).order_by('-publish_date')[:10]
+    context = {'articles': articles}
     return render(request, 'index.html', context)
 
 
@@ -78,13 +78,28 @@ def logoutPage(request):
 
 
 @login_required(login_url='login')
-def profilePage(request):
-    context = {}
+def profilePage(request, username):
+    profile = request.user.profiles_set.get(username=username)
+    form = ProfileForm(instance=profile)
+
+    context = {'form': form, 'profile': profile}
     return render(request, 'profile.html', context)
 
 
 @login_required(login_url='login')
-def articlePage(request, pk):
+def articlePage(request):
+    form = ArticleForm()
+    articles = Article.objects.all()
+    if request.method == "POST":
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            form.save()
+    context = {'articles': articles, 'form': form}
+    return render(request, 'articles.html', context)
+
+
+@login_required(login_url='login')
+def articleDetailPage(request, pk):
     form = ArticleForm()
     article = Article.objects.get(id=pk)
     if request.method == "POST":
@@ -92,4 +107,37 @@ def articlePage(request, pk):
         if form.is_valid():
             form.save()
     context = {'article': article, 'form': form}
-    return render(request, 'article.html', context)
+    return render(request, 'article_detail.html', context)
+
+
+def addArticlePage(request):
+    form = ArticleForm()
+    if request.method == "POST":
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+
+    context = {'form': form}
+    return render(request, 'addarticle.html', context)
+
+
+def editArticlePage(request, pk):
+    article = Article.objects.get(id=pk)
+    if request.method == "POST":
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            return redirect('article', article.id)
+    else:
+        form = ArticleForm(instance=article)
+
+    context = {'form': form, 'article': article}
+    return render(request, 'editarticle.html', context)
+
+
+def deleteArticle(request, pk):
+    article = Article.objects.get(id=pk)
+    if request:
+        article.delete()
+    return redirect('articles')

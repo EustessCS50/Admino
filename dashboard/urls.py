@@ -8,8 +8,12 @@ urlpatterns = [
     path('register/', views.registerPage, name='register'),
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutPage, name='logout'),
-    path('profile/', views.profilePage, name='profile'),
-    path('articles', views.articlePage, name='article'),
+    path('profile/<str:username>/', views.profilePage, name='profile'),
+    path('articles/', views.articlePage, name='articles'),
+    path('articles/add', views.addArticlePage, name='add_article'),
+    path('articles/<str:pk>/', views.articleDetailPage, name='article'),
+    path('articles/<str:pk>/edit', views.editArticlePage, name='edit_article'),
+    path('articles/<str:pk>/delete', views.deleteArticle, name='delete_article'),
 ]
 
 # Password Reset

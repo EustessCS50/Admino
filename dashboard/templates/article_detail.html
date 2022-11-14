@@ -14,7 +14,7 @@
         }
         .main{
             width: 100%;
-            min-height: 100vh;
+            min-height: 130vh;
             padding-left: 4%;
             padding-right: 4%;
             box-sizing: border-box;
@@ -29,7 +29,6 @@
         .logo{
             /* incase of a pic */
             width: 50px;
-            /* width: fit-content; */
             cursor: pointerx;
             margin: 30px 0;
         }
@@ -91,15 +90,10 @@
             margin-top: 20px;
         }
         .container.left-nav nav{
+            flex: 1;
             text-align: center;
             align-items: center;
             margin-top: 35px;
-            margin-left: 5px;
-            padding: 5px;
-        }
-        .container.left-nav nav ul{
-            margin-left: 5px;
-            padding: 5px;
         }
 
         .container.left-nav nav li{
@@ -148,47 +142,45 @@
             cursor: pointer;
         }
     </style>
-<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">-->
 </head>
 <body>
     <div class="main">
         <div class="navbar">
             <img src="{% static 'images/admin.jpeg' %}" alt="ADMINO" class="logo">
             <nav>
-                <ul id="menuList">
+                <ul>
                     <li><a href="{% url 'home' %}">Dashboard</a></li>
-                    <li><a href="{% url 'profile' user.username %}">Profile</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
                     <li><a href="#">About</a></li>
                 </ul>
             </nav>
-            <img src="{% static 'images/menu-icon.png' %}" alt="menu-icon"  onclick="togglemenu()" class="menu-icon">
+            <img src="{% static 'images/menu-icon.png' %}" alt="menu-icon" class="menu-icon">
         </div>
         <div class="container">
             <div class="left-nav">
-                <img src="{% static 'images/menu-icon.png' %}" alt="left-menu" onclick="sidetogglemenu()" class="left-menu">
+                <img src="{% static 'images/menu-icon.png' %}" alt="left-menu" class="left-menu">
                 <div class="profile">
                     <img src="{{ user.profile.pic.url }}" alt="pic" class="profile-img">
                     <button>+</button>
                 </div>
-                <p>{{ request.user }}  </p><span><a href="{% url 'profile' user.username %}">Edit</a></span>
+                <p>{{ request.user }}  </p><span><a href="{% url 'profile' %}">Edit</a></span>
                 <br>
                 <nav>
-                    <ul id="side-menuList">
+                    <ul>
                         <li><a href="{% url 'home' %}">Dashboard</a></li>
                         <br>
-                        <li><a href="{% url 'profile' user.username %}">Profile</a></li>
+                        <li><a href="{% url 'profile' %}">Profile</a></li>
                         <br>
                         <li><a href="#">Reports</a></li>
                         <br>
                         <li><a href="#">About</a></li>
                         <br>
                         <li><a href="{% url 'logout' %}">Logout</a></li>
-                        <br>
                     </ul>
                 </nav>
             </div>
             <div class="panel">
-                <h1>User Dashboard</h1>
+                <!-- <h1>User Dashboard</h1>
                 <br>
                 <div class="bal-wit">
                     <p class="bal">Account Bal: $0.00</p>
@@ -196,27 +188,29 @@
                 </div>
                 <hr>
                 <br>
-                <br>
+                <br> -->
                 <div class="row2">
                     <h2>ARTICLES</h2>
-                    <ul>
-                        {% for article in articles %}
-                            {% if article %}
-                                <li><a href="{% url 'article' article.id %}" id="{{ article.id }}">{{ article.title }}</a></li>
-                            {% else %}
-                                No Article Posted
-                            {% endif %}
-                        {% endfor %}
-
-                    </ul>
+                    <div>
+                        <br>
+                        <h3>{{ article.title }}</h3>
+                        <br>
+                        <p>{{ article.content }}</p>
+                        <br>
+                        <h4>Publisher: {{ article.publisher}}</h4>
+                        <h6>Date: {{ article.publish_date }}<h6>
+                    </div>
                     <br>
                     <hr>
-                    <a href="{% url 'articles' %}">All Articles</a>
                     <br>
+                    <div class="edit-del">
+                        <span><a href="{% url 'edit_article' article.id %}">Edit</a></span>
+                        <span><a href="{% url 'delete_article' article.id %}">Delete</a></span>
+                    </div>
                 </div>
             </div>
         </div>
+        
     </div>
-<script src="{% static 'js/script.js' %}" type="text/javascript" ></script>
 </body>
 </html>

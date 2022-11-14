@@ -187,11 +187,17 @@
                     <h2>User Info</h2>
                     <br>
                     <ul class="">
-                        <li>First Name: Eustess</li>
-                        <li>Last Name: Besong</li>
-                        <li>Username: EustessB</li>
-                        <li>Email: eustess@gmail.com</li>
+                        <li>First Name: {{user.firstname }}</li>
+                        <li>Last Name: {{ user.lastname }}</li>
+                        <li>Username: {{user.username}}</li>
+                        <li>Email: {{ user.email }}}</li>
+
                     </ul>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        {{ form }}
+                    </form>
+
                     <button class="edit-form-btn">Edit</button>
                     <br>
                     <br>

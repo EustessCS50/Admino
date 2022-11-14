@@ -111,7 +111,6 @@
 
         .container .panel{
             width: 75%;
-            height: 75vh;
             border: 5px solid gray;
             margin-left: 50px;
             margin-top: 25px;
@@ -157,7 +156,7 @@
             <nav>
                 <ul id="menuList">
                     <li><a href="{% url 'home' %}">Dashboard</a></li>
-                    <li><a href="{% url 'profile' user.username %}">Profile</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
                     <li><a href="#">About</a></li>
                 </ul>
             </nav>
@@ -170,13 +169,13 @@
                     <img src="{{ user.profile.pic.url }}" alt="pic" class="profile-img">
                     <button>+</button>
                 </div>
-                <p>{{ request.user }}  </p><span><a href="{% url 'profile' user.username %}">Edit</a></span>
+                <p>{{ request.user }}  </p><span><a href="{% url 'profile' %}">Edit</a></span>
                 <br>
                 <nav>
                     <ul id="side-menuList">
                         <li><a href="{% url 'home' %}">Dashboard</a></li>
                         <br>
-                        <li><a href="{% url 'profile' user.username %}">Profile</a></li>
+                        <li><a href="{% url 'profile' %}">Profile</a></li>
                         <br>
                         <li><a href="#">Reports</a></li>
                         <br>
@@ -210,9 +209,28 @@
 
                     </ul>
                     <br>
+                    <a href="{% url 'add_article' %}">Add Article</a>
                     <hr>
-                    <a href="{% url 'articles' %}">All Articles</a>
                     <br>
+                    <form id="article-form" action="" method="POST">
+                        {% csrf_token %}
+                        {{ form.errors }}
+                        <br>
+                        {{ form.title.label }}
+                        <br>
+                        {{ form.title }}
+                        <br>
+                        {{ form.publisher.label }}
+                        <br>
+                        {{ form.publisher }}
+                        <br>
+                        {{ form.content.label }}
+                        <br>
+                        {{ form.content }}
+                        <br>
+                        <br>
+                        <input type="submit" value="Add" class="add-btn">
+                    </form>
                 </div>
             </div>
         </div>

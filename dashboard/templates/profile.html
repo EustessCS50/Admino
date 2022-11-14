@@ -143,7 +143,7 @@
                 <ul>
                     <li><a href="{% url 'home' %}">Dashboard</a></li>
                     <li><a href="{% url 'profile' %}">Profile</a></li>
-                    <li><a href="{% url 'article' %}">Articles</a></li>
+                    <li><a href="{% url 'articles' %}">Articles</a></li>
                     <li><a href="#">About</a></li>
                 </ul>
             </nav>
@@ -190,33 +190,19 @@
                         <li>First Name: {{user.firstname }}</li>
                         <li>Last Name: {{ user.lastname }}</li>
                         <li>Username: {{user.username}}</li>
-                        <li>Email: {{ user.email }}}</li>
+                        <li>Email: {{ user.email }}</li>
 
                     </ul>
-                    <form method="POST" action="">
+                    <form method="POST" action="" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ form }}
+                        <table>
+                           {{ form.as_table }}
+                            {{ profile_form.as_table }}
+                        </table>
+                         <button type="submit" class="edit-form-btn">Edit</button>
                     </form>
-
-                    <button class="edit-form-btn">Edit</button>
                     <br>
                     <br>
-                    <form>
-                        <label>First Name</label>
-                        <input type="text" placeholder="Your First Name" name="firstname">
-                        <br>
-                        <label>Last Name</label>
-                        <input type="text" placeholder="Your Last Name" name="lastname">
-                        <br>
-                        <label>Username</label>
-                        <input type="text" placeholder="Your Username" name="username">
-                        <br>
-                        <label>Email</label>
-                        <input type="text" placeholder="Your Email" name="email">
-                        <br>
-                        <br>
-                        <input type="submit" value="Update" class="submit-btn">
-                    </form>
                 </div>
             </div>
         </div>

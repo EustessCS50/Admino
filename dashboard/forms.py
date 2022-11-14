@@ -10,13 +10,21 @@ class RegisterForm(UserCreationForm):
         model = User
         fields = {'username', 'email', 'password1', 'password2'}
 
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = {'first_name', 'last_name', 'username', 'email'}
+
 
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
         fields = {'pic',}
 
+
 class ArticleForm(ModelForm):
     class Meta:
         model = Article
         fields = '__all__'
+
+

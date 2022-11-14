@@ -186,13 +186,6 @@
                 <div class="row2"> 
                     <h2>User Info</h2>
                     <br>
-                    <ul class="">
-                        <li>First Name: {{user.firstname }}</li>
-                        <li>Last Name: {{ user.lastname }}</li>
-                        <li>Username: {{user.username}}</li>
-                        <li>Email: {{ user.email }}</li>
-
-                    </ul>
                     <form method="POST" action="" enctype="multipart/form-data">
                         {% csrf_token %}
                         <table>

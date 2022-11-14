@@ -197,7 +197,7 @@
                 <br>
                 <br>
                 <div class="row2">
-                    <h2>ARTICLES</h2>
+                    <h2>ALL ARTICLES</h2>
                     <ul>
                         {% for article in articles %}
                             {% if article %}
@@ -211,26 +211,6 @@
                     <br>
                     <a href="{% url 'add_article' %}">Add Article</a>
                     <hr>
-                    <br>
-                    <form id="article-form" action="" method="POST">
-                        {% csrf_token %}
-                        {{ form.errors }}
-                        <br>
-                        {{ form.title.label }}
-                        <br>
-                        {{ form.title }}
-                        <br>
-                        {{ form.publisher.label }}
-                        <br>
-                        {{ form.publisher }}
-                        <br>
-                        {{ form.content.label }}
-                        <br>
-                        {{ form.content }}
-                        <br>
-                        <br>
-                        <input type="submit" value="Add" class="add-btn">
-                    </form>
                 </div>
             </div>
         </div>

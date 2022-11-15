@@ -137,9 +137,10 @@
 <body>
     <div class="main">
         <div class="navbar">
-            <img src="{% static 'images/admin.jpeg' %}" alt="ADMINO" class="logo">
+            <img src="{% static 'images/admin.jpeg' %}" alt="ADMINO" class="logo"><h4>ADMINO<sup>&trade;</sup></h4>
             <nav>
                 <ul>
+                    <li><a href="{% url 'index' %}">Home</a></li>
                     <li><a href="{% url 'home' %}">Dashboard</a></li>
                     <li><a href="{% url 'profile' %}">Profile</a></li>
                     <li><a href="{% url 'articles' %}">Articles</a></li>

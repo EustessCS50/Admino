@@ -110,6 +110,7 @@
 
         .container .panel{
             width: 75%;
+            height: 75vh;
             border: 5px solid gray;
             margin-left: 50px;
             margin-top: 25px;
@@ -169,7 +170,7 @@
                     {% if user.profile.pic.url is not None %}
                         <img src="{{ user.profile.pic.url }}" alt="pic" class="profile-img">
                     {% else %}
-                        <img src="{% static 'images/profile_pics/default_profile_pic.jpg' %}">
+                        <img src="{% static 'images/profile_pics/default_profile_pic.jpg' %}" class="profile-img">
                     {% endif %}
                     <button>+</button>
                 </div>
@@ -194,14 +195,14 @@
                 <h1>User Dashboard</h1>
                 <br>
                 <div class="bal-wit">
-                    <p class="bal">Account Bal: $0.00</p>
-                    <button class="withdraw-btn">Withdraw</button>
+                    <p class="bal">Account Bal: ${{ user.profile.balance|floatformat:2 }}</p>
+                    <a class="withdraw-btn " href="{% url 'withdraw' %}">Withdraw</a>
                 </div>
                 <hr>
                 <br>
                 <br>
                 <div class="row2">
-                    <h2>ALL ARTICLES</h2>
+                    <h2>ARTICLES</h2>
                     <ul>
                         {% for article in articles %}
                             {% if article %}
@@ -213,12 +214,14 @@
 
                     </ul>
                     <br>
-                    <a href="{% url 'add_article' %}">Add Article</a>
                     <hr>
+                    <a href="{% url 'articles' %}">All Articles</a>
+                    <br>
                 </div>
             </div>
         </div>
     </div>
-<script src="{% static 'js/script.js' %}" type="text/javascript" ></script>
+<script type="text/javascript">
+</script>
 </body>
 </html>

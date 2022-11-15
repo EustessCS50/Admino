@@ -4,17 +4,19 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
-    path('', views.homePage, name='home'),
+    path('', views.homePage, name='index'),
+    path('articles/<str:pk>/', views.homeArtDetail, name='home_article'),
+    path('dashboard/', views.dashboardPage, name='home'),
     path('register/', views.registerPage, name='register'),
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutPage, name='logout'),
     path('profile/', views.profilePage, name='profile'),
     path('account/withdrawal', views.withdrawPage, name='withdraw'),
-    path('articles/', views.articlePage, name='articles'),
-    path('articles/add', views.addArticlePage, name='add_article'),
-    path('articles/<str:pk>/', views.articleDetailPage, name='article'),
-    path('articles/<str:pk>/edit', views.editArticlePage, name='edit_article'),
-    path('articles/<str:pk>/delete', views.deleteArticle, name='delete_article'),
+    path('user/articles/', views.articlePage, name='articles'),
+    path('user/articles/add', views.addArticlePage, name='add_article'),
+    path('user/articles/<str:pk>/', views.articleDetailPage, name='article'),
+    path('user/articles/<str:pk>/edit', views.editArticlePage, name='edit_article'),
+    path('user/articles/<str:pk>/delete', views.deleteArticle, name='delete_article'),
 ]
 
 # Password Reset

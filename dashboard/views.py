@@ -11,14 +11,36 @@ from django.utils import timezone
 from .forms import RegisterForm, ArticleForm, ProfileForm, UserForm
 from .models import *
 
+# Import Pagination stuff
+
+from django.core.paginator import Paginator
+
 
 # Create your views here.
 
-@login_required(login_url='login')
+
 def homePage(request):
+    articles = Article.objects.filter(publish_date__lte=timezone.now()).order_by('-publish_date')[:]
+
+    p = Paginator(articles, 2)
+    page = request.GET.get('page')
+    pagi_articles = p.get_page(page)
+
+    context = {'articles': articles, 'pagi_articles': pagi_articles}
+    return render(request, 'index.html', context)
+
+
+def homeArtDetail(request, pk):
+    article = Article.objects.get(id=pk)
+    context = {'article': article}
+    return render(request, 'home_arti_detail.html', context)
+
+
+@login_required(login_url='login')
+def dashboardPage(request):
     articles = Article.objects.filter(publish_date__lte=timezone.now()).order_by('-publish_date')[:10]
     context = {'articles': articles}
-    return render(request, 'index.html', context)
+    return render(request, 'dashboard.html', context)
 
 
 def registerPage(request):
@@ -100,7 +122,7 @@ def profilePage(request):
 @login_required(login_url='login')
 def articlePage(request):
     form = ArticleForm()
-    articles = Article.objects.all()
+    articles = Article.objects.filter(publish_date__lte=timezone.now()).order_by('-publish_date')[:]
     if request.method == "POST":
         form = ArticleForm(request.POST)
         if form.is_valid():
@@ -121,6 +143,7 @@ def articleDetailPage(request, pk):
     return render(request, 'article_detail.html', context)
 
 
+@login_required(login_url='login')
 def addArticlePage(request):
     form = ArticleForm()
     if request.method == "POST":
@@ -133,6 +156,7 @@ def addArticlePage(request):
     return render(request, 'addarticle.html', context)
 
 
+@login_required(login_url='login')
 def editArticlePage(request, pk):
     article = Article.objects.get(id=pk)
     if request.method == "POST":
@@ -147,6 +171,7 @@ def editArticlePage(request, pk):
     return render(request, 'editarticle.html', context)
 
 
+@login_required(login_url='login')
 def deleteArticle(request, pk):
     article = Article.objects.get(id=pk)
     if request:
@@ -154,6 +179,7 @@ def deleteArticle(request, pk):
     return redirect('articles')
 
 
+@login_required(login_url='login')
 def withdrawPage(request):
     if request.user.is_authenticated:
         profile = request.user.profile

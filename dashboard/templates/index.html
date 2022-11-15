@@ -53,7 +53,6 @@
 
         .container{
             display: flex;
-            height: 600px;
             width: 100%;
         }
 
@@ -109,11 +108,12 @@
         }
 
         .container .panel{
+            display:block;
             width: 75%;
-            height: 75vh;
             border: 5px solid gray;
-            margin-left: 50px;
+            margin-left: 25px;
             margin-top: 25px;
+            margin-bottom: 25px;
         }
 
         .container .panel .bal-wit{
@@ -121,12 +121,19 @@
             text-align: center;
             border: 5px solid gray;
             float: right;
-            margin-right: 10px;
         }
         .container .panel .bal-wit .withdraw-btn{
             background-color: gray;
             border-radius: 50px;
             cursor: pointer;
+        }
+        .container .panel .row2{
+            height:fit-content;
+            overflow: hidden;
+            border: 5px solid gray;
+            padding: 5px;
+            margin-bottom: 10px;
+            margin-left: 10px;
         }
         .container .panel .row2 ul{
             border: 5px solid gray;
@@ -136,15 +143,8 @@
             border-radius: 50px;
             cursor: pointer;
         }
-        .container .panel .row2 form{
-            padding: 15px;
-            border:  5px solid gray;
-        }
-        .container .panel .row2 form .add-btn{
-            width: 55px;
-            background-color: gray;
-            border-radius: 50px;
-            cursor: pointer;
+        .container .panel .row2 .articles{
+            display: inline-block;
         }
     </style>
 <!--    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">-->
@@ -152,9 +152,10 @@
 <body>
     <div class="main">
         <div class="navbar">
-            <img src="{% static 'images/admin.jpeg' %}" alt="ADMINO" class="logo">
+            <img src="{% static 'images/admin.jpeg' %}" alt="ADMINO" class="logo"><h4>ADMINO<sup>&trade;</sup></h4>
             <nav>
                 <ul id="menuList">
+                    <li><a href="{% url 'index' %}">Home</a></li>
                     <li><a href="{% url 'home' %}">Dashboard</a></li>
                     <li><a href="{% url 'profile' %}">Profile</a></li>
                     <li><a href="#">About</a></li>
@@ -173,7 +174,11 @@
                     {% endif %}
                     <button>+</button>
                 </div>
-                <p>{{ request.user }}  </p><span><a href="{% url 'profile' %}">Edit</a></span>
+                {% if request.user.email is not None %}
+                    <p>{{ request.user }}  </p><span><a href="{% url 'profile' %}">Edit</a></span>
+                {% else %}
+                    <span><a href="{% url 'register' %}">Signup</a></span><span><a href="{% url 'login' %}">Login</a></span>
+                {% endif %}
                 <br>
                 <nav>
                     <ul id="side-menuList">
@@ -191,31 +196,61 @@
                 </nav>
             </div>
             <div class="panel">
-                <h1>User Dashboard</h1>
-                <br>
-                <div class="bal-wit">
-                    <p class="bal">Account Bal: ${{ user.profile.balance|floatformat:2 }}</p>
-                    <a class="withdraw-btn " href="{% url 'withdraw' %}">Withdraw</a>
+                <div class="head">
+                    <h3>Welcome to <strong>Admino<sup>&trade;</sup></strong> Articles</h3>
+                    <br>
+                    <hr>
+                    <br>
+                    <div class="bal-wit">
+                        {% if user.profile.balance is not None %}
+                        <p class="bal">Account Bal: ${{ user.profile.balance|floatformat:2 }}</p>
+                        <a class="withdraw-btn " href="{% url 'withdraw' %}">Withdraw</a>
+                        {% else %}
+                        <p class="bal">Account Bal:$0.00</p>
+                        <a class="withdraw-btn " href="{% url 'login' %}">Login</a>
+                        {% endif %}
+                    </div>
+                    <br>
                 </div>
-                <hr>
                 <br>
                 <br>
                 <div class="row2">
                     <h2>ARTICLES</h2>
-                    <ul>
-                        {% for article in articles %}
+                    <div class="articles">
+                        <br>
+                        <h3>Page: {{ pagi_articles.number }}</h3>
+                        <hr>
+                        {% for article in pagi_articles %}
                             {% if article %}
-                                <li><a href="{% url 'article' article.id %}" id="{{ article.id }}">{{ article.title }}</a></li>
+                                <br>
+                                <h3>{{ article.title }}</h3>
+                                <p>{{ article.content }}</p>
+                                <br>
+                                <h5>Publisher: {{ article.publisher}}</h5>
+                                <h6>Date: {{ article.publish_date }}</h6>
+                                <br>
+                                <hr>
                             {% else %}
-                                No Article Posted
+                                <p>No Article Posted</p>
                             {% endif %}
                         {% endfor %}
-
-                    </ul>
+                    </div>
                     <br>
                     <hr>
-                    <a href="{% url 'articles' %}">All Articles</a>
                     <br>
+                    {% if pagi_articles.has_previous and not pagi_articles.has_next %}
+                        <a href="?page=1">&laquo;First Page</a>
+                        <a href="?page={{ pagi_articles.previous_page_number }}">Previous Page</a>
+                        <h4>Page {{pagi_articles.number }} of {{ pagi_articles.paginator.num_pages }}</h4>
+                    {% elif pagi_articles.has_previous and pagi_articles.has_next %}
+                        <a href="?page={{ pagi_articles.previous_page_number }}">&laquo;Previous Page</a>
+                        <a href="?page={{ pagi_articles.next_page_number }}">Next page&raquo;</a>
+                        <h4>Page {{pagi_articles.number }} of {{ pagi_articles.paginator.num_pages }}</h4>
+                    {% elif pagi_articles.has_next and not pagi_articles.has_previous %}
+                        <a href="?page={{ pagi_articles.next_page_number }}">Next page&raquo;</a>
+                        <a href="?page={{ pagi_articles.paginator.num_pages }}">&raquo;Last Page</a>
+                        <h4>Page {{pagi_articles.number }} of {{ pagi_articles.paginator.num_pages }}</h4>
+                    {% endif %}
                 </div>
             </div>
         </div>

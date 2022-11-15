@@ -7,14 +7,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-    body{
-    }
+        *{
+        margin: 0;
+        padding: 0;
+        }
+
+        .main{
+        width: 100%;
+        min-height: 100vh;
+        padding-left: 4%;
+        padding-right: 4%;
+        box-sizing: border-box;
+        overflow: hidden;
+        }
+
+        .navbar{
+        display: flex;
+        width: 100%;
+        border: 5px solid rgb(139, 138, 138);
+        align-items: center;
+        }
+
+        .logo{
+        /* incase of a pic */
+        width: 50px;
+        /* width: fit-content; */
+        cursor: pointerx;
+        margin: 30px 0;
+        }
+
+        .menu-icon{
+        width: 25px;
+        cursor: pointer;
+        }
+
+        .navbar nav{
+        flex: 1;
+        text-align: right;
+        border: rgb(139, 138, 138);
+        }
+
+        nav ul li{
+        list-style: none;
+        display: inline-block;
+        margin-right: 30px;
+        }
+
+        nav ul li a{
+        text-decoration: none;
+        border-radius: 50px;
+        }
+
         .container{
-            width: 300px;
             border: 10px solid gray;
             padding: 50px;
             margin: 50px;
             align-items: center;
+            text-align: center;
         }
         .container h1{
             text-align: center;
@@ -22,16 +71,25 @@
         .container h2{
             text-align: center;
         }
-        .container form{
-            padding: 15px;
-            margin-right: 50px;
-            margin-top: 0px;
-
+        form{
+            display:inline-block;
         }
     </style>
 </head>
 <body>
     <div class="main">
+        <div class="navbar">
+            <img src="{% static 'images/admin.jpeg' %}" alt="ADMINO" class="logo"><h4>ADMINO<sup>&trade;</sup></h4>
+            <nav>
+                <ul id="menuList">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'home' %}">Dashboard</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </nav>
+            <img src="{% static 'images/menu-icon.png' %}" alt="menu-icon"  onclick="togglemenu()" class="menu-icon">
+        </div>
         <div class="container">
             <h1>@ADMINO</h1>
             <hr>
@@ -59,7 +117,7 @@
                 {{ form.password2 }}
                 <br>
                 <br>
-                <input type="submit" value="Register">
+                <input type="submit" value="Register" style="border-radius:50px; background-color: gray; width: 100px; margin:0;">
             </form>
             <p>Have an account?</p>
             <a href="{% url 'login' %}">Login</a>

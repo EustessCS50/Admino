@@ -12,6 +12,7 @@ urlpatterns = [
     path('logout/', views.logoutPage, name='logout'),
     path('profile/', views.profilePage, name='profile'),
     path('account/withdrawal', views.withdrawPage, name='withdraw'),
+    path('account/withdrawal/complete', views.paymentComplete, name='complete'),
     path('user/articles/', views.articlePage, name='articles'),
     path('user/articles/add', views.addArticlePage, name='add_article'),
     path('user/articles/<str:pk>/', views.articleDetailPage, name='article'),

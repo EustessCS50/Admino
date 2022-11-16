@@ -1,9 +1,12 @@
+import json
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.core.mail import EmailMessage
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -181,16 +184,19 @@ def deleteArticle(request, pk):
 
 @login_required(login_url='login')
 def withdrawPage(request):
+    global amount
     if request.user.is_authenticated:
+        amount = 0
         profile = request.user.profile
         if request.method == "POST":
             amount = request.POST.get('amount')
-            email = request.user.email
+            # email = request.user.email
             minimum = 100
             balance = profile.balance
             if balance > minimum and int(amount) >= minimum:
-                profile.balance -= int(amount)
-                profile.save()
+                pass
+                # profile.balance -= int(amount)
+                # profile.save()
                 template = render_to_string(
                     'mails/withdraw_email_template.html',
                     {
@@ -199,18 +205,50 @@ def withdrawPage(request):
                         'balance': profile.balance,
                     })
 
-                mail = EmailMessage(
-                    'Admino Withdrawal',
-                    template,
-                    settings.EMAIL_HOST_USER,
-                    [email],
-                )
-                mail.fail_silently = False
-                mail.send()
+                # mail = EmailMessage(
+                #     'Admino Withdrawal',
+                #     template,
+                #     settings.EMAIL_HOST_USER,
+                #     [email],
+                # )
+                # mail.fail_silently = False
+                # mail.send()
 
-                return redirect('home')
+                # return redirect('home')
             else:
                 return redirect('withdraw')
 
-    context = {}
+    context = {'amount': float(amount)}
     return render(request, 'withdraw.html', context)
+
+
+def paymentComplete(request):
+    body = json.loads(request.body)
+    email = request.user.email
+    print(f"Response : {body} : User: {email}")
+    profile = request.user.profile
+    amount = body['amount']
+    minimum = 100
+    balance = profile.balance
+    if balance > minimum and int(amount) >= minimum:
+        profile.balance -= int(amount)
+        profile.save()
+        template = render_to_string(
+            'mails/withdraw_email_template.html',
+            {
+                'name': request.user.username,
+                'amount': amount,
+                'balance': profile.balance,
+            })
+
+        mail = EmailMessage(
+            'Admino Withdrawal',
+            template,
+            settings.EMAIL_HOST_USER,
+            [email],
+        )
+        mail.fail_silently = False
+        mail.send()
+        return redirect('home')
+
+    return JsonResponse("Payment Complete Thank You! ", safe=False)

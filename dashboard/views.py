@@ -282,40 +282,41 @@ def downloadArticle(request, pk):
 
 
 def purchaseComplete(request):
-    global message
-    body = json.loads(request.body)
-    email = request.user.email
-
-    print(f"Response : {body} : User: {email}")
-
-    profile = request.user.profile
-    amount = body['amount']
-    message = body['message']
-    minimum = 100
-    balance = profile.balance
-
-    profile.balance -= int(amount)
-    profile.save()
-    # template = render_to_string(
-    #     'mails/withdraw_email_template.html',
-    #     {
-    #         'name': request.user.username,
-    #         'amount': amount,
-    #         'balance': profile.balance,
-    #     })
-    #
-    # mail = EmailMessage(
-    #     'Admino Withdrawal',
-    #     template,
-    #     settings.EMAIL_HOST_USER,
-    #     [email],
-    # )
-    # mail.fail_silently = False
-    # mail.send()
-    if message == "Transaction Complete":
-        return redirect('home')
-
-    return JsonResponse("Purchase Complete", safe=False)
+    pass
+#     global message
+#     body = json.loads(request.body)
+#     email = request.user.email
+#
+#     print(f"Response : {body} : User: {email}")
+#
+#     profile = request.user.profile
+#     amount = body['amount']
+#     message = body['message']
+#     minimum = 100
+#     balance = profile.balance
+#
+#     profile.balance -= int(amount)
+#     profile.save()
+#     # template = render_to_string(
+#     #     'mails/withdraw_email_template.html',
+#     #     {
+#     #         'name': request.user.username,
+#     #         'amount': amount,
+#     #         'balance': profile.balance,
+#     #     })
+#     #
+#     # mail = EmailMessage(
+#     #     'Admino Withdrawal',
+#     #     template,
+#     #     settings.EMAIL_HOST_USER,
+#     #     [email],
+#     # )
+#     # mail.fail_silently = False
+#     # mail.send()
+#     if message == "Transaction Complete":
+#         return redirect('home')
+#
+#     return JsonResponse("Purchase Complete", safe=False)
 
 
 def downloadPage(request, pk):

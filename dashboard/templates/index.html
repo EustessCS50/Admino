@@ -229,7 +229,7 @@
                                 <h6>Date: {{ article.publish_date }}</h6>
                                 <br>
                                 <strong>Price: </strong><em>$15.00 </em>
-                                <a href="{% url 'buy_article' article.id %}" style="color: blue; border: solid blue 3px; border-radius: 50px;" >Buy</a>
+                                <a href="{% url 'download_art' article.id %}" style="color: blue; border: solid blue 3px; border-radius: 50px;" >Download</a>
                                 <br>
                                 <hr style="width: 25%;">
                             {% else %}

@@ -319,6 +319,7 @@ def purchaseComplete(request):
 
 
 def downloadPage(request, pk):
-    article = Article.objects.get(id=pk)
-    context = {'article': article}
-    return render(request, 'download_page.html', context)
+    pass
+#     article = Article.objects.get(id=pk)
+#     context = {'article': article}
+#     return render(request, 'download_page.html', context)

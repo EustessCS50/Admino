@@ -1,4 +1,10 @@
+import io
 import json
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+
 
 from django.conf import settings
 from django.contrib import messages
@@ -6,7 +12,7 @@ from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.core.mail import EmailMessage
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -24,7 +30,6 @@ from django.core.paginator import Paginator
 
 def homePage(request):
     articles = Article.objects.filter(publish_date__lte=timezone.now()).order_by('-publish_date')[:]
-
     p = Paginator(articles, 2)
     page = request.GET.get('page')
     pagi_articles = p.get_page(page)
@@ -195,26 +200,6 @@ def withdrawPage(request):
             balance = profile.balance
             if balance > minimum and int(amount) >= minimum:
                 pass
-                # profile.balance -= int(amount)
-                # profile.save()
-                template = render_to_string(
-                    'mails/withdraw_email_template.html',
-                    {
-                        'name': request.user.username,
-                        'amount': amount,
-                        'balance': profile.balance,
-                    })
-
-                # mail = EmailMessage(
-                #     'Admino Withdrawal',
-                #     template,
-                #     settings.EMAIL_HOST_USER,
-                #     [email],
-                # )
-                # mail.fail_silently = False
-                # mail.send()
-
-                # return redirect('home')
             else:
                 return redirect('withdraw')
 
@@ -252,3 +237,88 @@ def paymentComplete(request):
         return redirect('home')
 
     return JsonResponse("Payment Complete Thank You! ", safe=False)
+
+
+def buyArticle(request, pk):
+    if request.user.is_authenticated:
+        article = Article.objects.get(id=pk)
+
+    context = {'amount': float(15), 'article': article}
+    return render(request, 'buy_article.html', context)
+
+
+def downloadArticle(request, pk):
+    article = Article.objects.get(id=pk)
+
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    text = c.beginText()
+    text.setTextOrigin(inch, inch)
+    text.setFont("Helvetica", 14)
+
+    lines = [
+        "ADMINO ARTICLES",
+        " ",
+        " ",
+        f"{article.title}",
+        "-------------------------- ",
+        f"{article.content}",
+        " ",
+        f"{article.publisher}",
+        f"{article.publish_date}"
+    ]
+
+    "==================================================================="
+
+    for line in lines:
+        text.textLine(line)
+
+    c.drawText(text)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    return FileResponse(buf, as_attachment=True, filename=f"{article.title}.pdf")
+
+
+def purchaseComplete(request):
+    global message
+    body = json.loads(request.body)
+    email = request.user.email
+
+    print(f"Response : {body} : User: {email}")
+
+    profile = request.user.profile
+    amount = body['amount']
+    message = body['message']
+    minimum = 100
+    balance = profile.balance
+
+    profile.balance -= int(amount)
+    profile.save()
+    # template = render_to_string(
+    #     'mails/withdraw_email_template.html',
+    #     {
+    #         'name': request.user.username,
+    #         'amount': amount,
+    #         'balance': profile.balance,
+    #     })
+    #
+    # mail = EmailMessage(
+    #     'Admino Withdrawal',
+    #     template,
+    #     settings.EMAIL_HOST_USER,
+    #     [email],
+    # )
+    # mail.fail_silently = False
+    # mail.send()
+    if message == "Transaction Complete":
+        return redirect('home')
+
+    return JsonResponse("Purchase Complete", safe=False)
+
+
+def downloadPage(request, pk):
+    article = Article.objects.get(id=pk)
+    context = {'article': article}
+    return render(request, 'download_page.html', context)

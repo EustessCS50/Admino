@@ -33,17 +33,10 @@
         <div class="container">
             <h1>@ADMINO</h1>
             <br>
-            <h2>Withdrawals</h2>
-            <form action="" method="POST" id="form">
-                {% csrf_token %}
-                <label>Withdrawal Amount</label>
-                <Br>
-                <input type="number" name="amount" placeholder="Type Amount">
-                <button type="submit" id="form-button">Continue</button>
-            </form>
-
-                <h3>Withdraw: ${{ amount }}</h3>
-
+            <h2>Buy Article</h2>
+            <br>
+            <h3>Buy : {{ article.title }}</h3>
+            <h3>Price : $15.00</h3>
             <br>
             <p style="color: red;"><strong>Note 1: </strong>Make sure to type the amount and click continue. Before clicking the <strong>Paypal Button</strong></p>
             <p style="color: red;"><strong>Note 2: </strong>Incase a popup comes saying "blocked" exit the popup to continue Withdrawal. <strong>Paypal times out. </strong></p>
@@ -74,22 +67,23 @@
               var amount = {{ amount }}
 
               function completeOrder(){
-                var url = "{% url 'complete' %}"
+                var url = "{% url 'purchase_complete' %}"
                 fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json',
                         'X-CSRFToken': csrftoken,
                     },
-                    body: JSON.stringify({'amount': amount})
+                    body: JSON.stringify({'amount': amount, 'message': "Transaction Complete"})
                 })
                 .then((response) => {
                     response.json()
                 })
                 .then((data) =>{
                     console.log('Success:', data);
-                    window.location.href = "{% url 'home' %}"
+                    window.location.href = "{% url 'download_page' article.id %}"
                 })
+
               }
 
               paypal.Buttons({
@@ -120,7 +114,7 @@
               }).render('#paypal-button-container');
             </script>
             <hr>
-            <a href="{% url 'home' %}"><< Go Back</a>
+            <a href="{% url 'index' %}"><< Go Back</a>
         </div>
     </div>
 </body>

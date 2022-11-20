@@ -225,11 +225,13 @@
                                 <br>
                                 <h3>{{ article.title }}</h3>
                                 <p>{{ article.content }}</p>
-                                <br>
                                 <h5>Publisher: {{ article.publisher}}</h5>
                                 <h6>Date: {{ article.publish_date }}</h6>
                                 <br>
-                                <hr>
+                                <strong>Price: </strong><em>$15.00 </em>
+                                <a href="{% url 'buy_article' article.id %}" style="color: blue; border: solid blue 3px; border-radius: 50px;" >Buy</a>
+                                <br>
+                                <hr style="width: 25%;">
                             {% else %}
                                 <p>No Article Posted</p>
                             {% endif %}

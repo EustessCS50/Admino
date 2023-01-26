@@ -1,0 +1,12 @@
+{
+  "builds":[{
+    "src":"admino/wsgi.py",
+    "use": "@ardnt/vercel-python-wsgi",
+    "config": {"maxLamdaSize": "15mb", "runtime": "python3.9"}
+  }],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "admino/wsgi.py"
+    }
+  ]
